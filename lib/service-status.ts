@@ -40,19 +40,12 @@ export function isServiceStatusValue(value: string): value is ServiceStatusValue
 }
 
 export function sortServiceStatusRows(rows: ServiceStatusRow[]): ServiceStatusRow[] {
-  const updated = rows
-    .filter((row) => new Date(row.updated_at) > new Date(row.created_at))
-    .sort(
-      (a, b) =>
-        new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
-    );
-
-  const unchanged = rows
-    .filter((row) => new Date(row.updated_at) <= new Date(row.created_at))
-    .sort(
-      (a, b) =>
-        new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-    );
-
-  return [...updated, ...unchanged];
+  return [...rows].sort((a, b) => {
+    const updatedDiff =
+      new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
+    if (updatedDiff !== 0) {
+      return updatedDiff;
+    }
+    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+  });
 }
