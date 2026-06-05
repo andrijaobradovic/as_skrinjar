@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Geist_Mono, Inter } from "next/font/google";
+import { cookies } from "next/headers";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { createClient } from "@/utils/supabase/server";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -23,11 +25,17 @@ export const metadata: Metadata = {
     "AS Škrinjar — autoservis, chiptuning i prodaja automobila. Pogledajte ponudu vozila, pratite status servisa i kontaktirajte nas.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const supabase = createClient(cookieStore);
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   return (
     <html
       lang="sr"
@@ -46,7 +54,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Header />
+          <Header isAuthenticated={!!user} />
           <main className="flex-1">{children}</main>
           <Footer />
           <Toaster richColors position="top-center" />

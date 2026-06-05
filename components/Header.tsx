@@ -9,6 +9,7 @@ import { MenuIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "@/components/mode-toggle"
+import { logout } from "@/app/admin/actions"
 import {
   Sheet,
   SheetClose,
@@ -31,7 +32,11 @@ function isActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`)
 }
 
-export default function Header() {
+export default function Header({
+  isAuthenticated = false,
+}: {
+  isAuthenticated?: boolean
+}) {
   const pathname = usePathname()
   const [open, setOpen] = React.useState(false)
 
@@ -66,6 +71,14 @@ export default function Header() {
         </nav>
 
         <div className="flex items-center gap-1">
+          {isAuthenticated ? (
+            <form action={logout} className="hidden md:block">
+              <Button type="submit" variant="ghost" size="sm">
+                Odjavi se
+              </Button>
+            </form>
+          ) : null}
+
           <ModeToggle />
 
           <Sheet open={open} onOpenChange={setOpen}>
@@ -99,6 +112,19 @@ export default function Header() {
                     </Link>
                   </SheetClose>
                 ))}
+
+                {isAuthenticated ? (
+                  <form action={logout} className="mt-2 border-t pt-2">
+                    <Button
+                      type="submit"
+                      variant="ghost"
+                      size="sm"
+                      className="w-full justify-start"
+                    >
+                      Odjavi se
+                    </Button>
+                  </form>
+                ) : null}
               </nav>
             </SheetContent>
           </Sheet>
