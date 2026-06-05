@@ -24,15 +24,15 @@ export function ModeToggle() {
           <span className="sr-only">Promeni temu</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme("light")}>
-          Svetla
+      <DropdownMenuContent align="end">     
+      <DropdownMenuItem className="justify-center" onClick={() => setTheme("system")}>
+          Podrazumevana
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>
+        <DropdownMenuItem className="justify-center" onClick={() => setTheme("dark")}>
           Tamna
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>
-          Sistemska
+        <DropdownMenuItem className="justify-center" onClick={() => setTheme("light")}>
+          Svetla
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

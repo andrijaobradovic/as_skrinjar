@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { MailIcon, PhoneIcon, MapPinIcon } from "lucide-react";
 
+import { InstagramIcon } from "@/components/icons/instagram";
+
 const navLinks = [
   { href: "/", label: "Početna" },
   { href: "/automobili", label: "Automobili" },
@@ -16,8 +18,7 @@ export default function Footer() {
         <div className="space-y-3">
           <p className="text-base font-semibold tracking-tight">AS Škrinjar</p>
           <p className="max-w-xs text-sm text-muted-foreground">
-            Autoservis, chiptuning i prodaja automobila. Pouzdana usluga i
-            proverena vozila na jednom mestu.
+          Nudimo vam prodaju kvalitetnih polovnih automobila, kompletne autoservisne usluge i profesionalni chiptuning. Povećajte performanse, smanjite potrošnju i vozite bez brige uz tim kojem možete verovati.
           </p>
         </div>
 
@@ -43,18 +44,29 @@ export default function Footer() {
             <li className="flex items-center gap-2">
               <PhoneIcon className="size-4 shrink-0" />
               <a href="tel:+381000000000" className="transition-colors hover:text-foreground">
-                +381 00 000 0000
+                +381 62 800 55 30
               </a>
             </li>
             <li className="flex items-center gap-2">
               <MailIcon className="size-4 shrink-0" />
               <a href="mailto:info@as-skrinjar.rs" className="transition-colors hover:text-foreground">
-                info@as-skrinjar.rs
+                info@as.skrinjar.rs
               </a>
             </li>
             <li className="flex items-center gap-2">
               <MapPinIcon className="size-4 shrink-0" />
-              <span>Srbija</span>
+              <span>Kostolac, Srbija</span>
+            </li>
+            <li>
+              <a
+                href="https://www.instagram.com/as_skrinjar_chip_tuning/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 transition-colors hover:text-foreground"
+              >
+                <InstagramIcon className="size-4 shrink-0" />
+                <span>AS Škrinjar</span>
+              </a>
             </li>
           </ul>
         </div>
