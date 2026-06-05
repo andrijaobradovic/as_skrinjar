@@ -194,6 +194,7 @@ export function ContactForm() {
           type="text"
           placeholder="Vaše ime"
           autoComplete="name"
+          maxLength={CONTACT_LIMITS.nameMax}
           aria-invalid={!!fieldErrors.name}
           aria-describedby={fieldErrors.name ? "name-error" : undefined}
         />

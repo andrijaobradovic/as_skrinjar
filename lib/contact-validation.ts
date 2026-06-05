@@ -1,4 +1,5 @@
 export const CONTACT_LIMITS = {
+  nameMax: 20,
   subjectMax: 30,
   messageMax: 500,
 } as const;
@@ -48,6 +49,8 @@ export function validateContactForm(
 
   if (!values.name.trim()) {
     errors.name = "Obavezno polje";
+  } else if (values.name.trim().length > CONTACT_LIMITS.nameMax) {
+    errors.name = `Ime može imati najviše ${CONTACT_LIMITS.nameMax} karaktera`;
   }
 
   if (!values.email.trim()) {
