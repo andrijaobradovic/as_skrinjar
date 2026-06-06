@@ -102,8 +102,7 @@ export function ServiceStatusRowCard({
               <AlertDialogHeader>
                 <AlertDialogTitle>Brisanje vozila</AlertDialogTitle>
                 <AlertDialogDescription>
-                  Da li ste sigurno da želite da obrišete status ovog
-                  automobila?
+                  Da li ste sigurni da želite da obrišete ovaj automobil?
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>

@@ -32,6 +32,19 @@ function isActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`)
 }
 
+const navLinkActiveClassName =
+  "bg-primary text-primary-foreground hover:bg-[color-mix(in_oklch,var(--primary),black_35%)]"
+
+const navLinkInactiveClassName =
+  "text-foreground hover:bg-primary/10 dark:hover:bg-primary/15"
+
+function navLinkClassName(active: boolean) {
+  return cn(
+    "rounded-md px-3 py-2 text-sm font-medium transition-colors",
+    active ? navLinkActiveClassName : navLinkInactiveClassName
+  )
+}
+
 export default function Header({
   isAuthenticated = false,
 }: {
@@ -43,31 +56,33 @@ export default function Header({
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur-md supports-backdrop-filter:bg-background/60">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-        <Link href="/" className="flex items-center gap-2" aria-label="AS Škrinjar — početna">
+        <Link href="/" className="flex items-center" aria-label="AS Škrinjar — početna">
           <Image
-            src="/logo.png"
+            src="/logo.png?v=2"
             alt="AS Škrinjar"
-            width={40}
-            height={40}
+            width={180}
+            height={48}
             priority
-            className="object-contain"
+            unoptimized
+            className="h-10 w-auto object-contain"
           />
-          <span className="text-base font-semibold tracking-tight">
-            AS Škrinjar
-          </span>
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">
-          {navLinks.map((link) => (
-            <Button
-              key={link.href}
-              asChild
-              variant={isActive(pathname, link.href) ? "secondary" : "ghost"}
-              size="sm"
-            >
-              <Link href={link.href}>{link.label}</Link>
-            </Button>
-          ))}
+          {navLinks.map((link) => {
+            const active = isActive(pathname, link.href)
+            return (
+              <Button
+                key={link.href}
+                asChild
+                variant={active ? "default" : "ghost"}
+                size="sm"
+                className={active ? undefined : navLinkInactiveClassName}
+              >
+                <Link href={link.href}>{link.label}</Link>
+              </Button>
+            )
+          })}
         </nav>
 
         <div className="flex items-center gap-1">
@@ -101,12 +116,7 @@ export default function Header({
                   <SheetClose asChild key={link.href}>
                     <Link
                       href={link.href}
-                      className={cn(
-                        "rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted",
-                        isActive(pathname, link.href)
-                          ? "bg-secondary text-secondary-foreground"
-                          : "text-foreground"
-                      )}
+                      className={navLinkClassName(isActive(pathname, link.href))}
                     >
                       {link.label}
                     </Link>
