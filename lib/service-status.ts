@@ -8,6 +8,8 @@ export type ServiceStatusValue = (typeof SERVICE_STATUS_VALUES)[number];
 
 export const DEFAULT_SERVICE_STATUS: ServiceStatusValue = "na_cekanju";
 
+export const MAX_TABLICE_LENGTH = 11;
+
 export const SERVICE_STATUS_LABELS: Record<ServiceStatusValue, string> = {
   na_cekanju: "Na čekanju",
   servis_u_toku: "Servis u toku",

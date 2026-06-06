@@ -6,6 +6,7 @@ import { cookies } from "next/headers";
 import {
   DEFAULT_SERVICE_STATUS,
   isServiceStatusValue,
+  MAX_TABLICE_LENGTH,
   normalizeTablice,
   type ServiceStatusValue,
 } from "@/lib/service-status";
@@ -76,6 +77,9 @@ export async function addServiceStatus(
   const tablice = String(formData.get("tablice") ?? "").trim();
   if (!tablice) {
     return { error: "Unesite broj tablica." };
+  }
+  if (tablice.length > MAX_TABLICE_LENGTH) {
+    return { error: `Broj tablica može imati najviše ${MAX_TABLICE_LENGTH} karaktera.` };
   }
 
   const status = parseStatus(formData.get("status"));

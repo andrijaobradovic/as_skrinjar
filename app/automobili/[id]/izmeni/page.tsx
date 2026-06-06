@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { notFound } from "next/navigation";
+import { cookies } from "next/headers";
+import { notFound, redirect } from "next/navigation";
 
-import { Button } from "@/components/ui/button";
+import { CarForm } from "@/components/cars/CarForm";
 import { buildCarTitle, isValidCarId } from "@/lib/cars";
+import { carRowToFormValues } from "@/lib/car-form";
 import { fetchCarById } from "@/lib/cars-data";
+import { createClient } from "@/utils/supabase/server";
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -14,13 +16,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { id } = await params;
 
   if (!isValidCarId(id)) {
-    return { title: "Izmena oglasa" };
+    return { title: "Izmena oglasa", robots: { index: false, follow: false } };
   }
 
   const { car } = await fetchCarById(id);
 
   return {
     title: car ? `Izmena: ${buildCarTitle(car.marka, car.model)}` : "Izmena oglasa",
+    robots: { index: false, follow: false },
   };
 }
 
@@ -31,24 +34,35 @@ export default async function IzmeniOglasPage({ params }: PageProps) {
     notFound();
   }
 
-  const { car } = await fetchCarById(id);
+  const cookieStore = await cookies();
+  const supabase = createClient(cookieStore);
+
+  const [
+    {
+      data: { user },
+    },
+    { car },
+  ] = await Promise.all([
+    supabase.auth.getUser(),
+    fetchCarById(id),
+  ]);
+
+  if (!user) {
+    redirect("/");
+  }
 
   if (!car) {
     notFound();
   }
 
   return (
-    <section className="mx-auto flex w-[80%] min-w-0 flex-col items-center gap-6 px-4 py-24 text-center sm:px-6">
-      <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-        Stranica u izradi
-      </h1>
-      <p className="max-w-md text-muted-foreground">
-        Forma za izmenu oglasa „{buildCarTitle(car.marka, car.model)}“ biće uskoro
-        dostupna.
-      </p>
-      <Button asChild variant="outline">
-        <Link href={`/automobili/${id}`}>Nazad na oglas</Link>
-      </Button>
+    <section className="mx-auto flex w-[80%] min-w-0 flex-col px-4 py-12 sm:px-6">
+      <CarForm
+        mode="edit"
+        carId={car.id}
+        initialValues={carRowToFormValues(car)}
+        initialImages={car.car_images}
+      />
     </section>
   );
 }

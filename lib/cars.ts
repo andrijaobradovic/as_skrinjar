@@ -1,4 +1,5 @@
 import type { Database } from "@/utils/supabase/database.types";
+import { CAR_UNDEFINED_VALUE } from "@/lib/car-options";
 
 export const CARS_PAGE_SIZE = 6;
 export const CAR_PLACEHOLDER_IMAGE = "/car-placeholder.png";
@@ -41,7 +42,7 @@ export function formatOpis(value: string | null | undefined): string {
 }
 
 export function formatCarValue(value: string | number | null | undefined): string {
-  if (value == null || value === "") return "N/A";
+  if (value == null || value === "" || value === CAR_UNDEFINED_VALUE) return "N/A";
   return String(value);
 }
 

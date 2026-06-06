@@ -10,7 +10,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { StatusSelect } from "@/components/status/StatusSelect";
-import { DEFAULT_SERVICE_STATUS, type ServiceStatusValue } from "@/lib/service-status";
+import {
+  DEFAULT_SERVICE_STATUS,
+  MAX_TABLICE_LENGTH,
+  type ServiceStatusValue,
+} from "@/lib/service-status";
 import { cn } from "@/lib/utils";
 
 export function AddServiceStatusForm({
@@ -60,6 +64,7 @@ export function AddServiceStatusForm({
         placeholder="Broj tablica"
         required
         disabled={isPending}
+        maxLength={MAX_TABLICE_LENGTH}
         className="h-auto max-w-full px-3 py-1 text-center text-lg font-bold sm:h-11 sm:max-w-xs sm:text-left"
         aria-label="Broj tablica"
       />

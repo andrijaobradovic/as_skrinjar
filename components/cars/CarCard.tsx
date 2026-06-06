@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import * as React from "react";
 
 import { CarImage } from "@/components/cars/CarImage";
 import { Card } from "@/components/ui/card";
@@ -25,16 +24,6 @@ export function CarCard({
   displayedCount: number;
   priority?: boolean;
 }) {
-  const [openInNewTab, setOpenInNewTab] = React.useState(false);
-
-  React.useEffect(() => {
-    const media = window.matchMedia("(min-width: 768px)");
-    const update = () => setOpenInNewTab(media.matches);
-    update();
-    media.addEventListener("change", update);
-    return () => media.removeEventListener("change", update);
-  }, []);
-
   function handleNavigate() {
     sessionStorage.setItem(AUTOMOBILI_SCROLL_KEY, String(window.scrollY));
     sessionStorage.setItem(AUTOMOBILI_COUNT_KEY, String(displayedCount));
@@ -46,8 +35,6 @@ export function CarCard({
   return (
     <Link
       href={`/automobili/${car.id}`}
-      target={openInNewTab ? "_blank" : undefined}
-      rel={openInNewTab ? "noopener noreferrer" : undefined}
       onClick={handleNavigate}
       className="block h-full"
     >
@@ -59,14 +46,14 @@ export function CarCard({
       >
         <CarImage images={car.car_images} alt={title} priority={priority} />
 
-        <div className="flex min-h-[7.5rem] flex-col gap-2 p-4">
+        <div className="flex h-[8.5rem] flex-col gap-2 p-4">
           <p className="truncate text-lg font-semibold tracking-tight">{title}</p>
 
-          <p className="line-clamp-2 text-sm text-muted-foreground">
+          <p className="line-clamp-2 min-h-10 text-sm text-muted-foreground">
             {buildCarCardDetails(car)}
           </p>
 
-          <p className="mt-auto text-sm font-bold text-foreground">
+          <p className="mt-auto shrink-0 text-sm font-bold text-foreground">
             Cena: {formatPriceEur(car.cena_eur)}
           </p>
         </div>

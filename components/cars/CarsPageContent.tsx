@@ -21,7 +21,7 @@ export function CarsPageContent({
       {isAdmin ? (
         <div className="flex justify-end">
           <Button asChild>
-            <Link href="/automobili/novi">Dodaj oglas</Link>
+            <Link href="/automobili/dodaj">Dodaj oglas</Link>
           </Button>
         </div>
       ) : null}

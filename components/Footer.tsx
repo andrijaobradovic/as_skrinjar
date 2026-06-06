@@ -13,7 +13,7 @@ const navLinks = [
 
 export default function Footer() {
   return (
-    <footer className="border-t bg-muted/30">
+    <footer className="border-t bg-zinc-100 dark:bg-muted">
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 text-center sm:px-6 md:grid-cols-3 md:text-left">
         <div className="flex flex-col items-center space-y-3 md:items-start">
           <p className="text-base font-semibold tracking-tight">AS Škrinjar</p>
