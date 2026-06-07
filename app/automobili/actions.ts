@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 
 import {
   carFormValuesToInsert,
@@ -12,11 +12,31 @@ import {
 import { CAR_IMAGES_BUCKET, storagePathFromPublicUrl } from "@/lib/car-image-utils";
 import { CARS_PAGE_SIZE, isValidCarId, type CarListItem } from "@/lib/cars";
 import { LANDING_CARS_LIMIT } from "@/lib/landing-featured-cars";
+import {
+  checkNewsletterRateLimit,
+  recordNewsletterSubmission,
+} from "@/lib/newsletter-rate-limit";
+import { validateNewsletterEmail } from "@/lib/newsletter-validation";
+import {
+  isDuplicateSubscriberError,
+  normalizeNewsletterEmail,
+} from "@/lib/subscribers";
 import { createClient } from "@/utils/supabase/server";
 
 export type CarActionResult = { error: string } | { success: true };
 export type CreateCarResult = { error: string } | { carId: string };
 export type SaveCarImagesResult = { error: string } | { success: true };
+export type NewsletterSubscribeResult =
+  | { success: true }
+  | { error: string };
+
+function getClientIp(headerStore: Headers): string {
+  const forwarded = headerStore.get("x-forwarded-for");
+  if (forwarded) {
+    return forwarded.split(",")[0]?.trim() ?? "unknown";
+  }
+  return headerStore.get("x-real-ip") ?? "unknown";
+}
 
 type AuthResult =
   | { error: string }
@@ -345,6 +365,48 @@ export async function deleteCar(id: string): Promise<CarActionResult> {
   revalidatePath("/");
   revalidatePath("/automobili");
   revalidatePath(`/automobili/${id}`);
+  return { success: true };
+}
+
+export async function subscribeToNewsletter(
+  formData: FormData
+): Promise<NewsletterSubscribeResult> {
+  const honeypot = String(formData.get("website") ?? "").trim();
+  if (honeypot) {
+    return { success: true };
+  }
+
+  const rawEmail = String(formData.get("email") ?? "");
+  const validationError = validateNewsletterEmail(rawEmail);
+
+  if (validationError) {
+    return { error: validationError };
+  }
+
+  const headerStore = await headers();
+  const ip = getClientIp(headerStore);
+
+  if (!checkNewsletterRateLimit(ip)) {
+    return {
+      error: "Previše zahteva. Pokušajte ponovo za nekoliko minuta.",
+    };
+  }
+
+  const email = normalizeNewsletterEmail(rawEmail);
+  const cookieStore = await cookies();
+  const supabase = createClient(cookieStore);
+  const { error } = await supabase.from("subscribers").insert({ email });
+
+  if (error) {
+    if (isDuplicateSubscriberError(error)) {
+      return { error: "Već ste prijavljeni." };
+    }
+
+    return { error: "Greška pri učitavanju, pokušajte ponovo." };
+  }
+
+  recordNewsletterSubmission(ip);
+  revalidatePath("/automobili/newsletter-prijave");
   return { success: true };
 }
 

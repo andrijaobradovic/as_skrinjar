@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { subscribeToNewsletter } from "@/app/automobili/actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { validateNewsletterEmail } from "@/lib/newsletter-validation";
@@ -60,8 +61,9 @@ export function NewsletterForm() {
   const [email, setEmail] = React.useState("");
   const [fieldError, setFieldError] = React.useState<string | undefined>();
   const [message, setMessage] = React.useState<MessageState | null>(null);
+  const [isPending, setIsPending] = React.useState(false);
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const form = event.currentTarget;
@@ -81,6 +83,16 @@ export function NewsletterForm() {
       return;
     }
 
+    setIsPending(true);
+    const result = await subscribeToNewsletter(formData);
+    setIsPending(false);
+
+    if ("error" in result) {
+      setFieldError(result.error);
+      setMessage({ text: result.error, variant: "error" });
+      return;
+    }
+
     setFieldError(undefined);
     setMessage({ text: SUCCESS_MESSAGE, variant: "success" });
     setEmail("");
@@ -92,7 +104,7 @@ export function NewsletterForm() {
         {NEWSLETTER_TEXT}
       </p>
 
-      <form onSubmit={handleSubmit} className="space-y-3" noValidate>
+      <form onSubmit={(event) => void handleSubmit(event)} className="space-y-3" noValidate>
         <div
           className="absolute -left-[9999px] h-0 w-0 overflow-hidden"
           aria-hidden="true"
@@ -118,6 +130,7 @@ export function NewsletterForm() {
                 if (fieldError) setFieldError(undefined);
               }}
               aria-invalid={!!fieldError}
+              disabled={isPending}
               className="h-10"
             />
             {fieldError && !message ? (
@@ -127,7 +140,11 @@ export function NewsletterForm() {
             ) : null}
           </div>
 
-          <Button type="submit" className="h-10 shrink-0 px-5 sm:min-w-32">
+          <Button
+            type="submit"
+            disabled={isPending}
+            className="h-10 shrink-0 px-5 sm:min-w-32"
+          >
             Prijavi se
           </Button>
         </div>

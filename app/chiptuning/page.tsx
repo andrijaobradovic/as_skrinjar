@@ -4,9 +4,9 @@ import { ProcessSection } from "@/components/chiptuning/ProcessSection";
 import { CHIPTUNING_INTRO } from "@/lib/chiptuning-steps";
 
 export const metadata: Metadata = {
-  title: "Chiptuning | AS Škrinjar",
+  title: "Chiptuning",
   description:
-    "Profesionalni chiptuning u Kostolcu — detaljan pregled vozila, analiza ECU mape, izrada custom mape i siguran upis. Povećajte performanse i smanjite potrošnju.",
+    "Profesionalni chiptuning, detaljan pregled vozila, analiza ECU mape, izrada custom mape i siguran upis. Povećajte performanse i smanjite potrošnju.",
 };
 
 export default function ChiptuningPage() {

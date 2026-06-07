@@ -19,9 +19,12 @@ export function CarsPageContent({
   return (
     <div className="flex w-full flex-col gap-10">
       {isAdmin ? (
-        <div className="flex justify-end">
+        <div className="flex justify-end gap-2">
           <Button asChild>
             <Link href="/automobili/dodaj">Dodaj oglas</Link>
+          </Button>
+          <Button asChild>
+            <Link href="/automobili/newsletter-prijave">Newsletter prijave</Link>
           </Button>
         </div>
       ) : null}
