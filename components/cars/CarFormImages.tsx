@@ -12,6 +12,7 @@ import {
   compressImageFile,
   MAX_CAR_IMAGES,
   THUMBNAIL_SIZE,
+  validateCompressedImageFile,
   validateImageFile,
 } from "@/lib/car-image-utils";
 
@@ -131,7 +132,7 @@ export function CarFormImages({
 
       try {
         const file = await compressImageFile(originalFile);
-        const compressedValidation = validateImageFile(file);
+        const compressedValidation = validateCompressedImageFile(file);
         if (compressedValidation) {
           setLocalError(compressedValidation);
           continue;
@@ -233,7 +234,8 @@ export function CarFormImages({
         </Button>
 
         <p className="text-xs text-muted-foreground">
-          Prevucite slike ovde ili kliknite dugme. JPEG, PNG, WEBP do 8 MB.
+          Prevucite slike ovde ili kliknite dugme. JPEG, PNG ili WEBP do 2 MB —
+          automatski se kompresuju u WebP (max 1280 px).
         </p>
       </div>
 
