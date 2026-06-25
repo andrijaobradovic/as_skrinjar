@@ -4,6 +4,11 @@ import { notFound } from "next/navigation";
 import { CarDetailView } from "@/components/cars/CarDetailView";
 import { buildCarTitle, isValidCarId } from "@/lib/cars";
 import { fetchCarById } from "@/lib/cars-data";
+import {
+  buildDefaultOpenGraphImages,
+  DEFAULT_OG_IMAGE,
+  pickCarOgImageUrl,
+} from "@/lib/site-metadata";
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 
@@ -24,9 +29,28 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return { title: "Automobil nije pronađen" };
   }
 
+  const title = buildCarTitle(car.marka, car.model);
+  const description = `Detalji oglasa: ${title} — AS Škrinjar.`;
+  const ogImageUrl = pickCarOgImageUrl(car.car_images);
+  const ogImages =
+    ogImageUrl === DEFAULT_OG_IMAGE
+      ? buildDefaultOpenGraphImages()
+      : [{ url: ogImageUrl, alt: title }];
+
   return {
-    title: buildCarTitle(car.marka, car.model),
-    description: `Detalji oglasa: ${buildCarTitle(car.marka, car.model)} — AS Škrinjar.`,
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: ogImages,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogImageUrl],
+    },
   };
 }
 

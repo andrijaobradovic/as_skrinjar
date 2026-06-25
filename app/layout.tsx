@@ -8,6 +8,11 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import {
+  buildDefaultOpenGraphImages,
+  DEFAULT_OG_IMAGE,
+  SITE_URL,
+} from "@/lib/site-metadata";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -17,12 +22,23 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "AS Škrinjar — Autoservis, Chiptuning i prodaja automobila",
     template: "%s | AS Škrinjar",
   },
   description:
     "AS Škrinjar — autoservis, chiptuning i prodaja automobila. Pogledajte ponudu vozila, pratite status servisa i kontaktirajte nas.",
+  openGraph: {
+    type: "website",
+    locale: "sr_RS",
+    siteName: "AS Škrinjar",
+    images: buildDefaultOpenGraphImages(),
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: [DEFAULT_OG_IMAGE],
+  },
 };
 
 export default async function RootLayout({

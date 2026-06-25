@@ -12,7 +12,7 @@ export async function generateMetadata(): Promise<Metadata> {
   if (!cars.length) {
     return {
       description:
-        "AS Škrinjar — autoservis, chiptuning i prodaja automobila. Pogledajte ponudu vozila, pratite status servisa i kontaktirajte nas.",
+        "AS Škrinjar - autoservis, chiptuning i prodaja automobila. Pogledajte ponudu vozila, pratite status servisa i kontaktirajte nas.",
     };
   }
 
@@ -21,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
     .join(", ");
 
   return {
-    description: `AS Škrinjar — autoservis, chiptuning i prodaja automobila. Istaknuta ponuda: ${featuredNames}. Pogledajte vozila, pratite status servisa i kontaktirajte nas.`,
+    description: `AS Škrinjar - autoservis, chiptuning i prodaja automobila. Istaknuta ponuda: ${featuredNames}. Pogledajte vozila, pratite status servisa i kontaktirajte nas.`,
   };
 }
 
