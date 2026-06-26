@@ -24,7 +24,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "AS Škrinjar — Autoservis, Chiptuning i prodaja automobila",
+    default: "AS Škrinjar | Autoservis, Chiptuning i prodaja automobila",
     template: "%s | AS Škrinjar",
   },
   description:

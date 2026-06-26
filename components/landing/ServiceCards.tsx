@@ -143,7 +143,7 @@ export function ServiceCards() {
           <ServiceCard
             key={service.title}
             service={service}
-            priority={index === 0}
+            priority
             className="w-[85%] shrink-0 snap-center sm:w-auto"
           />
         ))}
